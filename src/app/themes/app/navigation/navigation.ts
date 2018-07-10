@@ -20,7 +20,21 @@ export const navigation: FuseNavigation[] = [
                     bg       : '#F44336',
                     fg       : '#FFFFFF'
                 }
+            },
+          {
+            id       : 'user-management',
+            title    : 'User Management',
+            translate: 'NAV.USER_MANAGEMENT.TITLE',
+            type     : 'item',
+            icon     : 'email',
+            url      : '/user-management',
+            badge    : {
+              title    : '25',
+              translate: 'NAV.USER_MANAGEMENT.BADGE',
+              bg       : '#F44336',
+              fg       : '#FFFFFF'
             }
+          }
         ]
     }
 ];

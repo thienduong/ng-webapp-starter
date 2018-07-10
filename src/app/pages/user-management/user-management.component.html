@@ -1,0 +1,11 @@
+<!--<p>-->
+  <!--dashboard works! {{ 'SAMPLE.HELLO' | translate }}-->
+<!--</p>-->
+
+<button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN" (click)="getUser()">
+  Get users
+</button>
+<div *ngFor="let user of (users | async)?.users">
+  {{user.Name}}
+</div>
+http://localhost:4200

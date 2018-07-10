@@ -7,17 +7,20 @@ import { MetaReducer } from '@ngrx/store';
 import { environment } from 'environments/environment';
 import { LoginState, LoginReducer } from './login/login.reducers';
 import { AuthState, AuthReducer } from './auth/auth.reducers';
+import {ListUserState, UserManagementReducer} from '@store/user-management/user-management.reducers';
 
 export interface AppState {
   router: fromRouter.RouterReducerState<RouterStateUrl>;
   auth: AuthState;
   login: LoginState;
+  users: ListUserState;
 }
 
 export const AppReducers: ActionReducerMap<AppState> = {
   router: fromRouter.routerReducer,
   auth: AuthReducer,
   login: LoginReducer,
+  users: UserManagementReducer
 };
 
 export function logger(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
