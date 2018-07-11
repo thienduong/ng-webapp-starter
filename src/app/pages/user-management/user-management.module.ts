@@ -12,6 +12,7 @@ import {CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
   imports: [
+
     AppSharedModule,
     UserManagementRoutingModule,
     TranslateModule,

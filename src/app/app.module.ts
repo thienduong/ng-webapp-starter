@@ -13,6 +13,7 @@ import { AppModule as FuseAppModule } from './themes/app/app.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material';
 import { LocalStorageModule } from 'angular-2-local-storage';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
   ],
   imports: [
     BrowserModule,
+    NoopAnimationsModule,
     BrowserAnimationsModule,
     FuseAppModule,
     TranslateModule.forRoot(),

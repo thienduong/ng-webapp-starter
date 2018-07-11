@@ -15,12 +15,14 @@ import { map } from 'rxjs/operators/map';
 import { catchError } from 'rxjs/operators/catchError';
 import { of as observableOf } from 'rxjs/observable/of';
 import {ListUserAState, ListUserState} from '@store/user-management/user-management.reducers';
+import { fuseAnimations } from '@fuse/animations';
 
 
 @Component({
   selector: 'user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss'],
+  animations: fuseAnimations
 })
 export class UserManagementComponent implements OnInit {
   public users: Observable<any>;
@@ -99,14 +101,14 @@ export class UserManagementComponent implements OnInit {
 
           // Flip flag to show that loading has finished.
           this.resultsLength = data.total;
-          return data;
+          return data.ProductList;
         }),
         catchError(() => {
 
           return observableOf([]);
         })
-      ).subscribe(data => { debugger
-         this.dataSource.data = data.ProductList});
+      ).subscribe(data =>
+         this.dataSource.data = data );
    console.log('this.dataSource', this.dataSource);
 
   }

@@ -1,7 +1,7 @@
 import {UserManagementActions, GET_LIST_USERS_SUCCESS} from './user-management.actions';
 
 export interface ListUserAState {
-  ProductList: any[];
+  ProductList: Array<any>;
   total: number;
 
 }
