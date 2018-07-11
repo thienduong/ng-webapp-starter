@@ -12,7 +12,7 @@ import {UserManagementService} from '@services/user-management';
 export class UserManagementEffects {
   @Effect()
   login$: Observable<Action> = this.actions$.pipe(
-    ofType(userManagementActions.GET_LIST_USERS),
+      ofType(userManagementActions.GET_LIST_USERS),
     // tap(() => this.store.dispatch(new userManagementActions.GetListUsers())),
     // debounceTime(2000),
     mergeMap(action => this.userManagementService.getUsers(action['payload']).pipe(
