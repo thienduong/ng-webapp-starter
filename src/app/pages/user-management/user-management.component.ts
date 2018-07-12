@@ -90,6 +90,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
 
   edit(Id) {
+    debugger
     this._router.navigate(['user-management', 'detail', Id]);
   }
 

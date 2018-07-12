@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -22,6 +22,7 @@ import {AppState} from '@store/store.reducers';
   animations: fuseAnimations
 })
 export class UserDetailComponent extends BaseComponent implements OnInit {
+  @Input() label: string;
   public users: Observable<any>;
   public data: UserModel = new UserModel();
   public pageType = 'new';

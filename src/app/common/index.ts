@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouteCachingModule } from '@modules/route-caching';
+import { PromiseButtonModule } from '@modules/promise-button/promise-button.module';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { RouteCachingModule } from '@modules/route-caching';
     TranslateModule,
     FuseSharedModule,
     RouteCachingModule,
+    PromiseButtonModule
   ],
   exports: [
     CommonModule,
@@ -20,6 +22,7 @@ import { RouteCachingModule } from '@modules/route-caching';
     TranslateModule,
     FuseSharedModule,
     RouteCachingModule,
+    PromiseButtonModule
   ],
   providers: [
     ...SHARED_SERVICES
