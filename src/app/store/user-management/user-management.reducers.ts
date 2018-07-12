@@ -1,20 +1,15 @@
 import {UserManagementActions, GET_LIST_USERS_SUCCESS} from './user-management.actions';
 
-export interface ListUserAState {
-  ProductList: Array<any>;
-  total: number;
-
-}
-
-
 export interface ListUserState {
-  users: Array<Object>;
+  users: Array<any>;
   total: number;
+  params: any;
 }
 
 const initialState: ListUserState = {
   total: 0,
   users: [],
+  params: [],
 }
 
 export function UserManagementReducer(state: ListUserState = initialState, action: UserManagementActions) {
@@ -22,7 +17,7 @@ export function UserManagementReducer(state: ListUserState = initialState, actio
     case GET_LIST_USERS_SUCCESS:
       return {
         ...state,
-        users: action.payload,
+        users: action.payload
       };
     default:
       return state;

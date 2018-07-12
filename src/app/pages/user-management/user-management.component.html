@@ -62,24 +62,14 @@
             <span class="text-truncate">{{row.Name}}</span>
           </mat-cell>
         </ng-container>
-
-
-        <!-- Active Column -->
-        <!--<ng-container cdkColumnDef="active">-->
-          <!--<mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs>{{'COMMON.ACTIVE' | translate}}</mat-header-cell>-->
-          <!--<mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>-->
-            <!--<mat-icon *ngIf="row.isActive" class="active-icon mat-green-600-bg s-16">check</mat-icon>-->
-            <!--<mat-icon *ngIf="!row.isActive" class="active-icon mat-red-500-bg s-16">close</mat-icon>-->
-          <!--</mat-cell>-->
-        <!--</ng-container>-->
-
         <!-- Buttons Column -->
         <ng-container cdkColumnDef="button2">
           <mat-header-cell *cdkHeaderCellDef>{{'COMMON.ACTION' | translate}}</mat-header-cell>
           <mat-cell *cdkCellDef="let row">
             <div fxFlex="row" fxLayoutAlign="start center">
-              <button mat-icon-button (click)="$event.stopPropagation();edit(row.id)" aria-label="Edit">
+              <button mat-icon-button (click)="$event.stopPropagation();edit(row.Id)" aria-label="Edit">
                 <mat-icon>edit</mat-icon>
+                <span class="text-truncate">{{row.Name}}</span>
               </button>
               <button mat-icon-button (click)="$event.stopPropagation();history(row.id)" aria-label="History">
                 <mat-icon>history</mat-icon>

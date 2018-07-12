@@ -7,12 +7,19 @@ import { MatFormFieldModule  } from '@angular/material';
 import { MatInputModule, MatTableModule, MatCardModule, MatProgressSpinnerModule, MatMenuModule,
   MatIconModule, MatToolbarModule, MatButtonModule, MatSelectModule, MatSortModule, MatPaginatorModule, MatProgressBarModule} from '@angular/material';
 import {CdkTableModule } from '@angular/cdk/table';
+import { RouterModule, Routes } from '@angular/router';
+import { UserDetailComponent } from '../user-management/detail/detail.component';
+// import promiseButtons from 'ng-promise-buttons';
 
-
+const routes: Routes = [
+  {path: '', redirectTo: 'list', pathMatch: 'full'},
+  {path: 'detail/:id', component: UserDetailComponent},
+  {path: '**', redirectTo: 'list'},
+];
 
 @NgModule({
   imports: [
-
+    RouterModule.forChild(routes),
     AppSharedModule,
     UserManagementRoutingModule,
     TranslateModule,
@@ -25,13 +32,16 @@ import {CdkTableModule } from '@angular/cdk/table';
     MatMenuModule,
     MatIconModule,
     MatToolbarModule,
-    MatButtonModule,
     MatSelectModule,
     MatSortModule,
     MatPaginatorModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    // promiseButtons
+
+
   ],
-  declarations: [UserManagementComponent],
+  declarations: [UserManagementComponent,
+  UserDetailComponent],
   exports: [UserManagementComponent],
 })
 export class UserManagementModule { }

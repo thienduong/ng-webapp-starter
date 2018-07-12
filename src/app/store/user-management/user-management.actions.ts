@@ -6,14 +6,14 @@ export const GET_LIST_USERS_ERROR = AppStoreService.createActionType('@USERS/GET
 export const GET_LIST_USERS = AppStoreService.createActionType('@USERS/GET_LIST_USERS');
 
 export class GetListUsers implements Action {
-  public readonly type = GET_LIST_USERS ;
+  public readonly type = GET_LIST_USERS;
   constructor(public payload: any) {
   }
 }
 
 export class GetListUsersSuccess implements Action {
   public readonly type = GET_LIST_USERS_SUCCESS;
-  constructor(public payload: any) {
+  constructor(public payload: any){
   }
 }
 

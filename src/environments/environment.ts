@@ -6,7 +6,7 @@ export const environment = {
     production: false,
     hmr: false,
     env: 'Development',
-    domain: 'http://localhost:4200'
+    domain: 'http://localhost:65385/api'
 };
 
 /*

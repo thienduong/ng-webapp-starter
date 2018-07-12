@@ -1,9 +1,13 @@
 export class UserModel {
-  public id: number;
-  public name?: string;
+  public Id: number;
+  public Name?: string;
 
-  constructor() {
-    this.id = undefined;
-    this.name = undefined;
+  constructor(user?) {
+    user = user || {};
+    this.Id = user.Id;
+    this.Name = user.Name;
   }
+}
+export class ListUserModel {
+  ProductList: UserModel[];
 }

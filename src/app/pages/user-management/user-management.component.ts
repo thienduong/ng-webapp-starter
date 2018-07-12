@@ -1,5 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
+import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
 import * as userManagementActions from '@store/user-management/user-management.actions';
 import {Store} from '@ngrx/store';
 import {AppState} from '@store/store.reducers';
@@ -9,14 +8,11 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { startWith } from 'rxjs/operators/startWith';
-import { switchMap } from 'rxjs/operators/switchMap';
 import {UserManagementService} from '@services/user-management';
 import { map } from 'rxjs/operators/map';
-import { catchError } from 'rxjs/operators/catchError';
-import { of as observableOf } from 'rxjs/observable/of';
-import {ListUserAState, ListUserState} from '@store/user-management/user-management.reducers';
 import { fuseAnimations } from '@fuse/animations';
-
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'user-management',
@@ -24,57 +20,38 @@ import { fuseAnimations } from '@fuse/animations';
   styleUrls: ['./user-management.component.scss'],
   animations: fuseAnimations
 })
-export class UserManagementComponent implements OnInit {
-  public users: Observable<any>;
-  /**
-   * Constructor
-   *
-   * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
-   */
-  // displayedColumns = ['id', 'name', 'progress', 'color'];
-  // dataSource: MatTableDataSource<UserData>;
+export class UserManagementComponent implements OnInit, OnDestroy {
+
   public dataSource = new MatTableDataSource();
-  public displayedColumns: string[] = ['Id','Name'];
+  public displayedColumns: string[] = ['Id', 'Name', 'button2'];
   public resultsLength = 0;
+  public isLoadingResults = true;
   public onDataChanged: Subject<any> = new Subject();
   public dataSubscription: Subscription;
+  public users: Observable<any>;
 
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private _userManagement: UserManagementService,
-    private store: Store<AppState>
-
-
-    // private _userManagementServicea: AuthService
-  )
-  {
-
-
-    // Create 100 users
-    // const users: UserData[] = [];
-    // for (let i = 1; i <= 100; i++) { users.push(createNewUser(i)); }
-    //
-    // // Assign the data to the data source for the table to render
-    // this.dataSource = new MatTableDataSource(users);
-    // // this._fuseTranslationLoaderService.loadTranslations(english);
-
+    private store: Store<AppState>,
+    private _router: Router,
+    private _toastrService: ToastrService
+  ) {
   }
 
   ngOnInit() {
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
-    // this.users = this.store.select(state => { ; return state.users; });
-    // this.users = this.store.select(state => state.users);
-
-    // this.users = this._userManagementService.getUsers();
-
-
-
+    this.users = this.store.select(state => {
+      return state.users;
+    });
+    this.users.subscribe(
+      x => this.dataSource.data = x.users
+    );
+    this.users.subscribe(
+      x => this.resultsLength = x.total
+    );
     const searchEvent = Observable.fromEvent(this.filter.nativeElement, 'keyup')
       .debounceTime(500)
       .distinctUntilChanged();
@@ -85,63 +62,48 @@ export class UserManagementComponent implements OnInit {
     this.dataSubscription = Observable.merge(this.sort.sortChange, this.paginator.page, searchEvent, this.onDataChanged)
       .pipe(
         startWith({}),
-        switchMap(() => {
-          const params: any = {
-            pageIndex: (this.paginator.pageIndex || 0) + 1,
-            pageSize: this.paginator.pageSize || 10,
-            textSearch: this.filter.nativeElement.value || '',
-          };
-          if (this.sort.active && this.sort.direction) {
-            params.sortField = this.sort.active;
-            params.orderDescending = this.sort.direction === 'desc' ? 'true' : 'false';
+        map(() => {
+            const params: any = {
+              pageIndex: (this.paginator.pageIndex || 0) + 1,
+              pageSize: this.paginator.pageSize || 10,
+              textSearch: this.filter.nativeElement.value || '',
+            };
+            if (this.sort.active && this.sort.direction) {
+              params.sortField = this.sort.active;
+              params.orderDescending = this.sort.direction === 'desc' ? 'true' : 'false';
+            }
+            this.store.dispatch(new userManagementActions.GetListUsers({params}));
+            this.isLoadingResults = false;
           }
-          return this._userManagement.getUsers(params);
-        }),
-        map((data: ListUserAState) => {
-
-          // Flip flag to show that loading has finished.
-          this.resultsLength = data.total;
-          return data.ProductList;
-        }),
-        catchError(() => {
-
-          return observableOf([]);
-        })
-      ).subscribe(data =>
-         this.dataSource.data = data );
-   console.log('this.dataSource', this.dataSource);
-
+        )
+      ).subscribe();
   }
 
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+  ngOnDestroy() {
+    if (this.dataSubscription) {
+      this.dataSubscription.unsubscribe();
+    }
   }
-  getUser(){
-    this.store.dispatch(new userManagementActions.GetListUsers('adsf'));
+
+  add() {
+    this._router.navigate(['user-management', 'users', 'new']);
+  }
+
+  edit(Id) {
+    this._router.navigate(['user-management', 'detail', Id]);
+  }
+
+  history(id) {
+    this._router.navigate(['user-management', 'users', 'history', id]);
+  }
+
+  import(event) {
+    if (event.result === 'Error') {
+      this._toastrService.error(event.errorMessages && event.errorMessages[0] || 'Import failed.');
+    } else if (event.result === 'Success') {
+      this._toastrService.success('Import successful.');
+      this.onDataChanged.next(event);
+    }
   }
 }
-// /** Builds and returns a new User. */
-// function createNewUser(id: number): UserData {
-//   const name =
-//     NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-//     NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-//
-//   return {
-//     id: id.toString(),
-//     name: name
-//   };
-// }
-// const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-//   'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-// const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-//   'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-//   'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-//
-// export interface UserData {
-//   id: string;
-//   name: string;
-//   progress: string;
-//   color: string;
-// }
+

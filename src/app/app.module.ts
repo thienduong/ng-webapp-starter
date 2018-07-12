@@ -27,7 +27,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     TranslateModule.forRoot(),
     AppStoreModule,
     AppSharedModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, { useHash: true }),
     PageModule,
     MatIconModule,
     LocalStorageModule.withConfig({
